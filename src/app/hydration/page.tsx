@@ -15,6 +15,8 @@ export default async function Hydation() {
   await queryClient.prefetchQuery(["hydrate-users"], getUsers);
   const dehydratedState = dehydrate(queryClient);
 
+  console.log(dehydratedState);
+
   return (
     <Hydrate state={dehydratedState}>
       <ListUsers />

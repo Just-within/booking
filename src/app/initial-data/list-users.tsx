@@ -18,6 +18,7 @@ export default function ListUsers({ users }: { users: User[] }) {
     queryFn: () => getUsers(),
     initialData: users,
   });
+  
   return (
     <main style={{ maxWidth: 1200, marginInline: "auto", padding: 20 }}>
       <div style={{ marginBottom: "4rem", textAlign: "center" }}>

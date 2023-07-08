@@ -1,13 +1,32 @@
 "use client";
 
 import { User } from "../types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import React from "react";
+import axios from "axios";
+import { getAccessToken } from "@/utils/getAccessToken";
+
 
 async function getUsers() {
   const res = await fetch("https://jsonplaceholder.typicode.com/users");
   const users = (await res.json()) as User[];
   return users;
+}
+
+async function createUser(email: string, password: string) {
+  const res = await axios({
+    method: 'post',
+    url: 'http://localhost:4019/api/v1/user',
+    headers: { 
+      'Access-Control-Allow-Origin': '*',
+      Authorization: `Bearer ${getAccessToken()}`
+    },
+    data: {
+      email,
+      password,
+    },
+  });
+  return res.data;
 }
 
 export default function ListUsers() {
@@ -18,11 +37,19 @@ export default function ListUsers() {
     queryFn: () => getUsers(),
   });
 
+  const { mutate } = useMutation<any, any, { email: string, password: string }>({
+    mutationKey: ["h"],
+    mutationFn: ({ email, password }) => createUser(email, password),
+  });
+
   return (
     <main style={{ maxWidth: 1200, marginInline: "auto", padding: 20 }}>
       <div style={{ marginBottom: "4rem", textAlign: "center" }}>
         <h4 style={{ marginBottom: 16 }}>{count}</h4>
-        <button onClick={() => setCount((prev) => prev + 1)}>increment</button>
+        <button onClick={() => {
+            setCount((prev) => prev + 1);
+            mutate({ email: 'test2@gmail.com', password: '123' }, { onSuccess: (res) => { console.log('success', res) }, onError: (err) => console.log('onError', err) })
+          }}>increment</button>
         <button
           onClick={() => setCount((prev) => prev - 1)}
           style={{ marginInline: 16 }}
