@@ -1,3 +1,6 @@
+import { BookingType } from './booking';
+import { PermissionType } from './permission';
+
 export enum CourseLevelEnum {
   BASIC = 'basic',
   PROFICIENT = 'proficient',
@@ -18,4 +21,25 @@ export interface PostCourseType {
   teacherEligibilityForCourseSelectionId: number;
   studentEligibilityForCourseSelectionId: number;
   fileId?: number;
+}
+
+export interface CourseType {
+  id: number;
+  title: string;
+  level: CourseLevelEnum;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
+  startAt: Date;
+  endAt: Date;
+  timeZone: string;
+  link: string;
+  maxNumOfTeachersAllowToRegister: number;
+  maxNumOfStudentsAllowToRegister: number;
+  bookings: BookingType[];
+  teacherEligibilityForCourseSelection: PermissionType[];
+  studentEligibilityForCourseSelection: PermissionType[];
+  // comments: CommentEntity[];
+  // image: FileEntity;
 }

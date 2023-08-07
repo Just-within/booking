@@ -1,36 +1,37 @@
-import axios from 'axios';
+// import axios from 'axios';
 import React, { useState } from 'react';
 import { theme, Button, Modal, Form, Input, Table, message } from 'antd';
-import { getAccessToken } from '@/utils/getAccessToken';
+// import { getAccessToken } from '@/utils/getAccessToken';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { getPermission, postPermission } from '@/api';
 
-async function getPermission() {
-  const res = await axios({
-    method: 'get',
-    url: 'http://localhost:4019/api/v1/permission',
-    headers: { 
-      'Access-Control-Allow-Origin': '*',
-      Authorization: `Bearer ${getAccessToken()}`
-    },
-  });
-  return res.data;
-}
+// async function getPermission() {
+//   const res = await axios({
+//     method: 'get',
+//     url: 'http://localhost:4019/api/v1/permission',
+//     headers: { 
+//       'Access-Control-Allow-Origin': '*',
+//       Authorization: `Bearer ${getAccessToken()}`
+//     },
+//   });
+//   return res.data;
+// }
 
-async function postPermission(name: string, description: string) {
-  const res = await axios({
-    method: 'post',
-    url: 'http://localhost:4019/api/v1/permission',
-    headers: { 
-      'Access-Control-Allow-Origin': '*',
-      Authorization: `Bearer ${getAccessToken()}`
-    },
-    data: {
-      name,
-      description,
-    },
-  });
-  return res.data;
-}
+// async function postPermission(name: string, description: string) {
+//   const res = await axios({
+//     method: 'post',
+//     url: 'http://localhost:4019/api/v1/permission',
+//     headers: { 
+//       'Access-Control-Allow-Origin': '*',
+//       Authorization: `Bearer ${getAccessToken()}`
+//     },
+//     data: {
+//       name,
+//       description,
+//     },
+//   });
+//   return res.data;
+// }
 
 const columns: any = [
   {
@@ -39,14 +40,9 @@ const columns: any = [
     key: 'name',
   },
   {
-    title: 'Weight',
-    dataIndex: 'weight',
-    key: 'weight',
-  },
-  {
-    title: 'Created At',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
   },
   {
     title: 'Updated At',

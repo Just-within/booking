@@ -12,6 +12,8 @@ import { timezoneData } from "@/constant/timezone";
 import Main from "./main";
 import RolePage from "./role";
 import PermissionPage from "./permission";
+import BookingPage from "./booking";
+import CommentPage from "./comment";
 
 function getItem(
   label: React.ReactNode,
@@ -31,6 +33,8 @@ const items: MenuItem[] = [
   getItem('Course', '1'),
   getItem('Role', '2'),
   getItem('Permission', '10'),
+  getItem('Booking', '11'),
+  getItem('Comments', '12'),
   getItem('User', 'sub1', undefined, [
     getItem('Tom', '3'),
     getItem('Bill', '4'),
@@ -70,10 +74,10 @@ export default function Dashboard() {
     token: { colorBgContainer },
   } = theme.useToken();
   const { data, isLoading, isFetching, error } = useQuery({
-    queryKey: ["hydrate-users"],
+    queryKey: ["users"],
     queryFn: () => getUser(),
   });
-  console.log(activeKey);
+  console.log(data);
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
@@ -90,6 +94,8 @@ export default function Dashboard() {
           {activeKey === '1' && <Main />}
           {activeKey === '2' && <RolePage />}
           {activeKey === '10' && <PermissionPage />}
+          {activeKey === '11' && <BookingPage />}
+          {activeKey === '12' && <CommentPage />}
           {/* {activeKey !== '1' && <div>{activeKey}</div>} */}
         </Content>
         <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
