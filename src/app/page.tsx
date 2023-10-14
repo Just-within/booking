@@ -31,7 +31,7 @@ async function login(email: string, password: string) {
 async function singup(email: string, password: string) {
   const res = await axios({
     method: 'post',
-    url: 'http://localhost:4019/api/v1/auth/login',
+    url: 'http://localhost:4019/api/v1/auth/signup',
     data: {
       email,
       password,
@@ -69,7 +69,13 @@ export default function Home() {
         router.push('/dashboard');
       }, onError: (e) => console.log(e) })
     } else {
-      startSignup({ password, email }, { onSuccess: (e) => console.log(e), onError: (e) => console.log(e) })
+      console.log('==========2=========')
+      startSignup({ password, email }, { onSuccess: (e) => {
+        if (window?.localStorage?.setItem) {
+          window.localStorage.setItem('ACCESS_TOKEN', e.accessToken);
+        }
+        router.push('/dashboard');
+      }, onError: (e) => console.log(e) })
     }
   };
   

@@ -75,7 +75,6 @@ export default function CommentPage() {
     },
   });
 
-  console.log(comments, courses)
   return (
     <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
       <div>Comments</div>

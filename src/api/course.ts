@@ -20,3 +20,15 @@ export async function getCourse() {
   });
   return res.data;
 }
+
+export async function updateCourse(id: number, updateData: PostCourseType) {
+  const res = await axios({
+    method: 'patch',
+    url: `${API_BASIC_URL}/course/${id}`,
+    headers: queryHeaders,
+    data: {
+      ...updateData,
+    },
+  });
+  return res.data;
+}

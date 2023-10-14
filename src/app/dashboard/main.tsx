@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 import { theme, Button, Modal, Form, Input, DatePicker, Select, message, Table } from 'antd';
 import { timezoneData } from "@/constant";
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { PostCourseType, CourseLevelEnum, PermissionType } from '@/types';
-import { getPermission, postCourse, getCourse } from '@/api';
+import { PostCourseType, CourseLevelEnum, PermissionType, CourseType } from '@/types';
+import { getPermission, postCourse, getCourse, updateCourse } from '@/api';
 
 const columns: any = [
   {
@@ -66,15 +67,17 @@ const columns: any = [
 ]
 
 export default function Main() {
+  const [form] = Form.useForm();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const [displayModal, setDisplayModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(0);
   const { data: courses, refetch: refetchCourse } = useQuery({
     queryKey: ["course"],
     queryFn: () => getCourse(),
   });
-  const { mutate: postRoleFun } = useMutation<any, any, PostCourseType>({
+  const { mutate: postCourseFun } = useMutation<any, any, PostCourseType>({
     mutationKey: ["postCourse"],
     mutationFn: (data) => postCourse(data),
     onSuccess: () => {
@@ -83,10 +86,11 @@ export default function Main() {
       setDisplayModal(false);
     },
   });
-  const { data: permissions, } = useQuery({
-    queryKey: ["role"],
+  const { data: permissions } = useQuery({
+    queryKey: ["permissions"],
     queryFn: () => getPermission(),
   });
+
   return (
     <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
       <Button style={{ marginBottom: 20 }} onClick={() => setDisplayModal(true)}>Create Course</Button>
@@ -94,22 +98,40 @@ export default function Main() {
         rowKey="id"
         dataSource={courses}
         columns={columns}
-        // onRow={(record) => {
-        //   return {
-        //     onClick: () => {
-        //       setSelectedRole(record);
-        //     },
-        //   };
-        // }}
+        onRow={({
+          teacherEligibilityForCourseSelection,
+          studentEligibilityForCourseSelection,
+          startAt,
+          endAt,
+          ...restDate
+        }: CourseType) => {
+          return {
+            onClick: () => {
+              console.log(restDate, teacherEligibilityForCourseSelection);
+              form.setFieldsValue({
+                ...restDate,
+                startAt: moment(startAt),
+                endAt: moment(endAt),
+                teacherEligibilityForCourseSelectionId: teacherEligibilityForCourseSelection.map((t) => t.id),
+                studentEligibilityForCourseSelectionId: studentEligibilityForCourseSelection.map((s) => s.id),
+              });
+              setDisplayModal(true);
+              setSelectedId(restDate.id);
+            },
+          };
+        }}
       />
       <Modal title="Create Course" footer={<div />} width="98vw" open={displayModal} onCancel={() => setDisplayModal(false)} onOk={(e) => console.log(e)}>
         <Form
           name="basic"
+          form={form}
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
           style={{ width: 600 }}
           initialValues={{ remember: true }}
-          onFinish={value => postRoleFun(value)}
+          onFinish={value => {
+            postCourseFun(value)
+          }}
           onFinishFailed={(e) => console.log(e)}
           autoComplete="off"
         >

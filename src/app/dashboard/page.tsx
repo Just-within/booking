@@ -14,6 +14,7 @@ import RolePage from "./role";
 import PermissionPage from "./permission";
 import BookingPage from "./booking";
 import CommentPage from "./comment";
+import ProfilePage from "./profile";
 
 function getItem(
   label: React.ReactNode,
@@ -35,6 +36,7 @@ const items: MenuItem[] = [
   getItem('Permission', '10'),
   getItem('Booking', '11'),
   getItem('Comments', '12'),
+  getItem('Profile', '13'),
   getItem('User', 'sub1', undefined, [
     getItem('Tom', '3'),
     getItem('Bill', '4'),
@@ -96,6 +98,7 @@ export default function Dashboard() {
           {activeKey === '10' && <PermissionPage />}
           {activeKey === '11' && <BookingPage />}
           {activeKey === '12' && <CommentPage />}
+          {activeKey === '13' && <ProfilePage />}
           {/* {activeKey !== '1' && <div>{activeKey}</div>} */}
         </Content>
         <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
